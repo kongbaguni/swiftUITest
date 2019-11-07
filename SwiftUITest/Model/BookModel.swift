@@ -25,19 +25,15 @@ class BookModel: Object {
         return .init(id:id , name: name, desc: desc, level: level, count: count, lastCards: votes.last?.cardsStringValue ?? "")
     }
     
-    func vote() {
-        let a = CardManager.shared.popCard(cardNumber: 5)
-        
+    func vote() {        
         if votes.sum(ofProperty: "count") > 1000 {
             level += 1
             votes.removeAll()
         }
-        
+                
         let vote = VoteModel()
-        for card in a {
-            vote.insertCartd(card: card)
-        }
-        count = vote.count + votes.sum(ofProperty: "count")
+        vote.insertCartd(cards: CardManager.shared.popCard(cardNumber: 5))
+        count = votes.sum(ofProperty: "count") + vote.count
         vote.targetId = id
         votes.append(vote)
     }

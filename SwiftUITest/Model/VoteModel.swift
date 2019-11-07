@@ -16,10 +16,13 @@ class VoteModel: Object {
     @objc dynamic var count = 0
     private var cards = List<CardModel>()
     
-    func insertCartd(card: CardManager.Card) {
-        let model = card.model
-        cards.append(model)
-        count += card.value
+    func insertCartd(cards: [CardManager.Card]) {
+        count = 0
+        for c in cards {
+            let model = c.model
+            self.cards.append(model)
+            count += c.value
+        }
     }
     
     override static func primaryKey() -> String? {
@@ -38,6 +41,7 @@ class VoteModel: Object {
             }
             result += card.cardValue?.stringValue ?? ""
         }
-        return result
+        return result
     }
 }
+

@@ -52,7 +52,7 @@ class CardManager {
         
         var model:CardModel {
             let model = CardModel()
-            model.index = value
+            model.index = index
             model.type = typeValue
             return model
         }
