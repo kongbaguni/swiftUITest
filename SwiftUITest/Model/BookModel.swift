@@ -22,10 +22,10 @@ class BookModel: Object {
     }
     
     var book:Book {
-        return .init(id:id , name: name, desc: desc, level: level, count: count, lastCards: votes.last?.cardsStringValue ?? "")
+        return .init(id:id , name: name, desc: desc, level: level, count: count, lastCards: votes.last?.cardsImageValues ?? [])
     }
     
-    func vote() {        
+    func vote() {
         if votes.sum(ofProperty: "count") > 1000 {
             level += 1
             votes.removeAll()

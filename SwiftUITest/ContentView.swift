@@ -29,7 +29,7 @@ struct Book:Identifiable, Hashable {
     let desc:String
     let level:Int
     let count:Int
-    let lastCards:String
+    let lastCards:[UIImage]
 }
 
 final class BookStore : ObservableObject {
@@ -97,14 +97,27 @@ struct TextRow : View {
                     .font(/*@START_MENU_TOKEN@*/.caption/*@END_MENU_TOKEN@*/)
                     .foregroundColor(Color.black)
                 Text("\(self.book.level):\(self.book.count)")
-                Text(self.book.lastCards)
-                    .foregroundColor(Color.black)
-            }.rotation3DEffect(
-                Angle(degrees: 5),
-                axis: (
-                    x: CGFloat(self.book.count % 20 - 10),
-                    y: 10.0,
-                    z: CGFloat(self.book.count % 20 - 10)))
+                Image(uiImage: self.book.lastCards[0])
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 20, height: 30, alignment: .center)
+                Image(uiImage: self.book.lastCards[1])
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 20, height: 30, alignment: .center)
+                Image(uiImage: self.book.lastCards[2])
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 20, height: 30, alignment: .center)
+                Image(uiImage: self.book.lastCards[3])
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 20, height: 30, alignment: .center)
+                Image(uiImage: self.book.lastCards[4])
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 20, height: 30, alignment: .center)
+            }
                 .frame(
                     width: self.getWidth(width: geo.size.width, count: self.book.count)
                     , height: geo.size.height

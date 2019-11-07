@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import SwiftUI
+
 class CardManager {
     static let shared = CardManager()
     
@@ -55,6 +57,79 @@ class CardManager {
             model.index = index
             model.type = typeValue
             return model
+        }
+        
+        var image:UIImage? {
+            switch type {
+            case .club:
+                switch index {
+                case 1: return #imageLiteral(resourceName: "AC")
+                case 2: return #imageLiteral(resourceName: "2C")
+                case 3: return #imageLiteral(resourceName: "3C")
+                case 4: return #imageLiteral(resourceName: "4C")
+                case 5: return #imageLiteral(resourceName: "5C")
+                case 6: return #imageLiteral(resourceName: "6C")
+                case 7: return #imageLiteral(resourceName: "7C")
+                case 8: return #imageLiteral(resourceName: "8C")
+                case 9: return #imageLiteral(resourceName: "9C")
+                case 10: return #imageLiteral(resourceName: "10C")
+                case 11: return #imageLiteral(resourceName: "JC")
+                case 12: return #imageLiteral(resourceName: "QC")
+                case 13: return #imageLiteral(resourceName: "KC")
+                default:return nil
+                }
+            case .heart:
+                switch index {
+                case 1: return #imageLiteral(resourceName: "AH")
+                case 2: return #imageLiteral(resourceName: "2H")
+                case 3: return #imageLiteral(resourceName: "3H")
+                case 4: return #imageLiteral(resourceName: "4H")
+                case 5: return #imageLiteral(resourceName: "5H")
+                case 6: return #imageLiteral(resourceName: "6H")
+                case 7: return #imageLiteral(resourceName: "7H")
+                case 8: return #imageLiteral(resourceName: "8H")
+                case 9: return #imageLiteral(resourceName: "9H")
+                case 10: return #imageLiteral(resourceName: "10H")
+                case 11: return #imageLiteral(resourceName: "JH")
+                case 12: return #imageLiteral(resourceName: "QH")
+                case 13: return #imageLiteral(resourceName: "KH")
+                default: return nil
+                }
+            case .diamond:
+                switch index {
+                case 1: return #imageLiteral(resourceName: "AD")
+                case 2: return #imageLiteral(resourceName: "2D")
+                case 3: return #imageLiteral(resourceName: "3D")
+                case 4: return #imageLiteral(resourceName: "4D")
+                case 5: return #imageLiteral(resourceName: "5D")
+                case 6: return #imageLiteral(resourceName: "6D")
+                case 7: return #imageLiteral(resourceName: "7D")
+                case 8: return #imageLiteral(resourceName: "8D")
+                case 9: return #imageLiteral(resourceName: "9D")
+                case 10: return #imageLiteral(resourceName: "10D")
+                case 11: return #imageLiteral(resourceName: "JD")
+                case 12: return #imageLiteral(resourceName: "QD")
+                case 13: return #imageLiteral(resourceName: "KD")
+                default: return nil
+                }
+            case .spade:
+                switch index {
+                case 1: return #imageLiteral(resourceName: "AS")
+                case 2: return #imageLiteral(resourceName: "2S")
+                case 3: return #imageLiteral(resourceName: "3S")
+                case 4: return #imageLiteral(resourceName: "4S")
+                case 5: return #imageLiteral(resourceName: "5S")
+                case 6: return #imageLiteral(resourceName: "6S")
+                case 7: return #imageLiteral(resourceName: "7S")
+                case 8: return #imageLiteral(resourceName: "8S")
+                case 9: return #imageLiteral(resourceName: "9S")
+                case 10: return #imageLiteral(resourceName: "10S")
+                case 11: return #imageLiteral(resourceName: "JS")
+                case 12: return #imageLiteral(resourceName: "QS")
+                case 13: return #imageLiteral(resourceName: "KS")
+                default: return nil
+                }
+            }
         }
 
     }

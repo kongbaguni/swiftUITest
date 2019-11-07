@@ -41,7 +41,17 @@ class VoteModel: Object {
             }
             result += card.cardValue?.stringValue ?? ""
         }
-        return result
+        return result
+    }
+    
+    var cardsImageValues:[UIImage] {
+        var result:[UIImage] = []
+        for card in cards {
+            if let img = card.cardValue?.image {
+                result.append(img)
+            }
+        }
+        return result
     }
 }
-
+
