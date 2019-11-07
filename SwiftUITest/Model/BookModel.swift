@@ -26,13 +26,27 @@ class BookModel: Object {
     }
     
     func vote() {
-        if votes.sum(ofProperty: "count") > 1000 {
+        func levelup() {
             level += 1
             votes.removeAll()
         }
+        if votes.sum(ofProperty: "count") > 1000 {
+            levelup()
+        }
                 
+        let cards = CardManager.shared.popCard(cardNumber: 5)
+        if let result = CardManager.shared.checkCard(tcards: cards) {
+            debugPrint(result)
+            switch result {
+            case .royalStraightFlush, .straightFlush :
+                levelup()
+            default:
+                break
+            }
+        }
+        
         let vote = VoteModel()
-        vote.insertCartd(cards: CardManager.shared.popCard(cardNumber: 5))
+        vote.insertCartd(cards: cards)
         count = votes.sum(ofProperty: "count") + vote.count
         vote.targetId = id
         votes.append(vote)

@@ -12,6 +12,20 @@ import SwiftUI
 class CardManager {
     static let shared = CardManager()
     
+    enum CardValue:String {
+        case highcard = "Highcard"
+        case pair = "Pair"
+        case toPairs = "Two pairs"
+        case threeOfaKind = "Three of a kind"
+        case straight = "Straight"
+        case flush = "Flush"
+        case fullHouse = "Full house"
+        case fourOfaKind = "four of a kind"
+        case straightFlush = "Straight flush"
+        case royalFlush = "Royal flush"
+        case royalStraightFlush = "Royal Straight flush"
+    }
+    
     enum CardType:String {
         case spade = "S"
         case heart = "H"
@@ -202,6 +216,7 @@ class CardManager {
         }
     }
     
+    /** 카드 뽑는다.*/
     func popCard(cardNumber:Int)->[Card] {
         if dack.count < cardNumber {
             print("shuffle --------")
@@ -210,7 +225,7 @@ class CardManager {
         }
         
         var result:[Card] = []
-        for _ in 0...cardNumber {
+        for _ in 0..<cardNumber {
             result.append(dack.first!)
             dack.removeFirst()
         }
@@ -221,5 +236,37 @@ class CardManager {
         print(out)
         
         return result
+    }
+    
+    func checkCard(tcards:[Card])->CardValue? {
+        if tcards.count == 5 {
+            let a = tcards.sorted { (a, b) -> Bool in
+                return a.index > b.index
+            }
+            
+            var check:[Int] = []
+            var types = Set<String>()
+            for c in a {
+                check.append(c.index)
+                types.insert(c.type.rawValue)
+            }
+            if check == [13,12,11,10,9] {
+                if types.count == 1 {
+                    return .royalStraightFlush
+                } else {
+                    return .straightFlush
+                }
+            }
+            if (check[0] - check[1] == 1)
+                && (check[1] - check[2] == 1)
+                && (check[3] - check[4] == 1) {
+                return .straight
+            }
+            if types.count == 1 {
+                return .flush
+            }
+            return .highcard
+        }
+        return nil
     }
 }
