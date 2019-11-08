@@ -54,17 +54,33 @@ struct TextRow : View {
     }
     
     var bgcolor:Color {
-        switch (self.player.totalPoint % 4) {
-        case 0:
-            return Color.orange
-        case 1:
-            return Color.red
-        case 2:
-            return Color.blue
-        case 3:
+        guard let playerModel = try! Realm().object(ofType: PlayerModel.self, forPrimaryKey: self.player.id),
+            let gameValue = playerModel.games.last?.gameResultValue
+            else {
+            return Color.black
+        }
+        
+        switch gameValue {
+        case .highcard:
+            return Color(white: 0.5)
+        case .onePair:
+            return Color(white: 0.45)
+        case .twoPairs:
+            return Color(white: 0.4)
+        case .threeOfaKind:
+            return Color(white: 0.35)
+        case .straight:
+            return Color(white: 0.3)
+        case .flush:
             return Color.purple
-        default:
+        case .fullHouse:
+            return Color.orange
+        case .fourOfaKind:
             return Color.green
+        case .straightFlush:
+            return Color.blue
+        case .fiveOfaKind:
+            return Color.red
         }
     }
     
@@ -154,7 +170,7 @@ struct ContentView: View {
     
     @State var playerName = ""
     @State var playerDesc = ""
-    
+    @State var isAutoPlay = false
     var body: some View {
         return NavigationView {
             VStack {
@@ -187,6 +203,11 @@ struct ContentView: View {
                     }
                 }
                 HStack {
+                    Button(action:{
+                        self.gamePlay()
+                    }) {
+                        Text("play")
+                    }
                     Button(action: {
                         let realm = try! Realm()
                         let list = realm.objects(PlayerModel.self)
@@ -242,16 +263,16 @@ struct ContentView: View {
             }
         }.onAppear {
             self.store.fetch()
-            self.autoGamePlay()
+            self.gamePlay()
         }
     }
     
-    func autoGamePlay() {
+    func gamePlay() {
         let realm = try! Realm()
         let list = realm.objects(PlayerModel.self)
-        if list.count == 0 {
+        if list.count == 0 && self.isAutoPlay {
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
-                self.autoGamePlay()
+                self.gamePlay()
             }
             return
         }
@@ -261,8 +282,10 @@ struct ContentView: View {
         }
         try! realm.commitWrite()
         self.store.fetch()
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            self.autoGamePlay()
+        if self.isAutoPlay {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                self.gamePlay()
+            }
         }
     }
 }

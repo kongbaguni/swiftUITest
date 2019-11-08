@@ -28,28 +28,25 @@ class PlayerModel: Object {
     func play() {
         func levelup() {
             level += 1
-            games.removeAll()
         }
         if games.sum(ofProperty: "point") > 1000 {
             levelup()
         }
                 
         let cards = CardManager.shared.popCard(cardNumber: 5)
-        if let result = CardManager.shared.checkCard(tcards: cards) {
-            debugPrint(result)
-            switch result {
-            case .royalStraightFlush, .straightFlush :
-                levelup()
-            default:
-                break
-            }
-        }
-        
+
         let game = GameModel()
         game.insertCartd(cards: cards)
         totalPoint = games.sum(ofProperty: "point") + game.point
         game.playerId = id
         games.append(game)
+        
+        switch game.gameResultValue {
+        case .highcard:
+            break
+        default:
+            levelup()
+        }
     }
     
     func voteClear() {

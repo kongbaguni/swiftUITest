@@ -53,5 +53,47 @@ class GameModel: Object {
         }
         return result
     }
+
+    /** 족보판정*/
+    var gameResultValue:CardManager.CardValue {
+        var tcards:[CardManager.Card] = []
+        for card in cards {
+            if let c = card.cardValue {
+                tcards.append(c)
+            }
+        }
+        if tcards.count == 5 {
+            let a = tcards.sorted { (a, b) -> Bool in
+                return a.index > b.index
+            }
+            
+            var check:[Int] = []
+            var types = Set<String>()
+            for c in a {
+                check.append(c.index)
+                types.insert(c.type.rawValue)
+            }
+            
+            if types.count == 5 {
+                return .fiveOfaKind
+            }
+            
+            var isStraight = false
+            if (check[0] - check[1] == 1)
+                && (check[1] - check[2] == 1)
+                && (check[2] - check[3] == 1)
+                && (check[3] - check[4] == 1) {
+                isStraight = true
+            }
+            let isFlush = types.count == 1
+            
+            if isStraight && isFlush {
+                return .straightFlush
+            }
+            
+        }
+        return .highcard
+    }
+    
 }
 

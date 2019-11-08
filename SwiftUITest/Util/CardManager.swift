@@ -8,22 +8,26 @@
 
 import Foundation
 import SwiftUI
+import RealmSwift
 
 class CardManager {
     static let shared = CardManager()
-    
+    /** 플레이어 의 수 */
+    var players:Int {
+        return try! Realm().objects(PlayerModel.self).count
+    }
+    /** 카드 족보*/
     enum CardValue:String {
         case highcard = "Highcard"
-        case pair = "Pair"
-        case toPairs = "Two pairs"
+        case onePair = "One Pair"
+        case twoPairs = "Two pair"
         case threeOfaKind = "Three of a kind"
         case straight = "Straight"
         case flush = "Flush"
         case fullHouse = "Full house"
-        case fourOfaKind = "four of a kind"
+        case fourOfaKind = "Four of a kind"
         case straightFlush = "Straight flush"
-        case royalFlush = "Royal flush"
-        case royalStraightFlush = "Royal Straight flush"
+        case fiveOfaKind = "Five of a kind"
     }
     
     enum CardType:String {
@@ -31,6 +35,7 @@ class CardManager {
         case heart = "H"
         case diamond = "D"
         case club = "C"
+        case joker = "J"
     }
     
     struct Card {
@@ -38,6 +43,9 @@ class CardManager {
         let index:Int
         /** 카드가 가지는 값*/
         var value:Int {
+            if type == .joker {
+                return 10
+            }
             switch index {
             case 1,11,12,13:
                 return 10
@@ -75,6 +83,8 @@ class CardManager {
         
         var image:UIImage? {
             switch type {
+            case .joker:
+                return #imageLiteral(resourceName: "joker")
             case .club:
                 switch index {
                 case 1: return #imageLiteral(resourceName: "AC")
@@ -149,6 +159,10 @@ class CardManager {
     }
     
     private let cards:[Card] = [
+        Card(type: .joker, index: 0),
+//        Card(type: .joker, index: 1),
+//        Card(type: .joker, index: 2),
+//        Card(type: .joker, index: 3),
         Card(type: .club, index: 1),
         Card(type: .club, index: 2),
         Card(type: .club, index: 3),
@@ -218,7 +232,7 @@ class CardManager {
     
     /** 카드 뽑는다.*/
     func popCard(cardNumber:Int)->[Card] {
-        if dack.count < cardNumber {
+        if dack.count < cardNumber * players {
             print("shuffle --------")
             dack.removeAll()
             insertCard()
@@ -236,37 +250,5 @@ class CardManager {
         print(out)
         
         return result
-    }
-    
-    func checkCard(tcards:[Card])->CardValue? {
-        if tcards.count == 5 {
-            let a = tcards.sorted { (a, b) -> Bool in
-                return a.index > b.index
-            }
-            
-            var check:[Int] = []
-            var types = Set<String>()
-            for c in a {
-                check.append(c.index)
-                types.insert(c.type.rawValue)
-            }
-            if check == [13,12,11,10,9] {
-                if types.count == 1 {
-                    return .royalStraightFlush
-                } else {
-                    return .straightFlush
-                }
-            }
-            if (check[0] - check[1] == 1)
-                && (check[1] - check[2] == 1)
-                && (check[3] - check[4] == 1) {
-                return .straight
-            }
-            if types.count == 1 {
-                return .flush
-            }
-            return .highcard
-        }
-        return nil
     }
 }
