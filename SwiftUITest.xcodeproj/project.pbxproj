@@ -15,9 +15,9 @@
 		C334410623728C3E007C752A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C334410423728C3E007C752A /* LaunchScreen.storyboard */; };
 		C334411123728C3E007C752A /* SwiftUITestTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C334411023728C3E007C752A /* SwiftUITestTests.swift */; };
 		C334411C23728C3E007C752A /* SwiftUITestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C334411B23728C3E007C752A /* SwiftUITestUITests.swift */; };
-		C334412B2372A326007C752A /* BookModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C334412A2372A326007C752A /* BookModel.swift */; };
+		C334412B2372A326007C752A /* PlayerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C334412A2372A326007C752A /* PlayerModel.swift */; };
 		C334412E2372A7C5007C752A /* Results+Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = C334412D2372A7C5007C752A /* Results+Util.swift */; };
-		C33441302373CC52007C752A /* VoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C334412F2373CC52007C752A /* VoteModel.swift */; };
+		C33441302373CC52007C752A /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C334412F2373CC52007C752A /* GameModel.swift */; };
 		C33441322373E4D4007C752A /* CardManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33441312373E4D4007C752A /* CardManager.swift */; };
 		C33441342373EC3E007C752A /* CardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C33441332373EC3E007C752A /* CardModel.swift */; };
 		E18CFEFE4F1B2337A1384286 /* Pods_SwiftUITest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0831AABFF682C8773A77E737 /* Pods_SwiftUITest.framework */; };
@@ -58,9 +58,9 @@
 		C334411723728C3E007C752A /* SwiftUITestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftUITestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C334411B23728C3E007C752A /* SwiftUITestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUITestUITests.swift; sourceTree = "<group>"; };
 		C334411D23728C3E007C752A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C334412A2372A326007C752A /* BookModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookModel.swift; sourceTree = "<group>"; };
+		C334412A2372A326007C752A /* PlayerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerModel.swift; sourceTree = "<group>"; };
 		C334412D2372A7C5007C752A /* Results+Util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Results+Util.swift"; sourceTree = "<group>"; };
-		C334412F2373CC52007C752A /* VoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteModel.swift; sourceTree = "<group>"; };
+		C334412F2373CC52007C752A /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
 		C33441312373E4D4007C752A /* CardManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardManager.swift; sourceTree = "<group>"; };
 		C33441332373EC3E007C752A /* CardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -167,8 +167,8 @@
 		C33441292372A30C007C752A /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				C334412A2372A326007C752A /* BookModel.swift */,
-				C334412F2373CC52007C752A /* VoteModel.swift */,
+				C334412A2372A326007C752A /* PlayerModel.swift */,
+				C334412F2373CC52007C752A /* GameModel.swift */,
 				C33441332373EC3E007C752A /* CardModel.swift */,
 			);
 			path = Model;
@@ -368,12 +368,12 @@
 			files = (
 				C33440FA23728C3A007C752A /* AppDelegate.swift in Sources */,
 				C33440FC23728C3A007C752A /* SceneDelegate.swift in Sources */,
-				C334412B2372A326007C752A /* BookModel.swift in Sources */,
+				C334412B2372A326007C752A /* PlayerModel.swift in Sources */,
 				C33441322373E4D4007C752A /* CardManager.swift in Sources */,
 				C334412E2372A7C5007C752A /* Results+Util.swift in Sources */,
 				C33441342373EC3E007C752A /* CardModel.swift in Sources */,
 				C33440FE23728C3A007C752A /* ContentView.swift in Sources */,
-				C33441302373CC52007C752A /* VoteModel.swift in Sources */,
+				C33441302373CC52007C752A /* GameModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

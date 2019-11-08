@@ -1,5 +1,5 @@
 //
-//  BookModel.swift
+//  PlayerModel.swift
 //  SwiftUITest
 //
 //  Created by Changyul Seo on 2019/11/06.
@@ -9,28 +9,28 @@
 import Foundation
 import RealmSwift
 
-class BookModel: Object {
+class PlayerModel: Object {
     @objc dynamic var id = UUID().uuidString
     @objc dynamic var name = ""
     @objc dynamic var desc = ""
     @objc dynamic var level = 0
-    @objc dynamic var count = 0
-    let votes = List<VoteModel>()
+    @objc dynamic var totalPoint = 0
+    let games = List<GameModel>()
     
     override static func primaryKey() -> String? {
         return "id"
     }
     
-    var book:Book {
-        return .init(id:id , name: name, desc: desc, level: level, count: count, lastCards: votes.last?.cardsImageValues ?? [])
+    var player:Player {
+        return .init(id:id , name: name, desc: desc, level: level, totalPoint: totalPoint, lastCards: games.last?.cardsImageValues ?? [])
     }
     
-    func vote() {
+    func play() {
         func levelup() {
             level += 1
-            votes.removeAll()
+            games.removeAll()
         }
-        if votes.sum(ofProperty: "count") > 1000 {
+        if games.sum(ofProperty: "point") > 1000 {
             levelup()
         }
                 
@@ -45,21 +45,21 @@ class BookModel: Object {
             }
         }
         
-        let vote = VoteModel()
-        vote.insertCartd(cards: cards)
-        count = votes.sum(ofProperty: "count") + vote.count
-        vote.targetId = id
-        votes.append(vote)
+        let game = GameModel()
+        game.insertCartd(cards: cards)
+        totalPoint = games.sum(ofProperty: "point") + game.point
+        game.playerId = id
+        games.append(game)
     }
     
     func voteClear() {
-        votes.removeAll()
-        count = 0
+        games.removeAll()
+        totalPoint = 0
         level = 0
     }
     
-    var lastaddedCount:Int {
-        return votes.last?.count ?? 0
+    var lastGamePoint:Int {
+        return games.last?.point ?? 0
     }
 }
 

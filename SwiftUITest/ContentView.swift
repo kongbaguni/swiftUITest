@@ -9,46 +9,44 @@
 import SwiftUI
 import RealmSwift
 
-var playerCount = 0
-
 fileprivate extension Results {
-    var list:[Book] {
-        var result:[Book] = []
+    var list:[Player] {
+        var result:[Player] = []
         for item in self {
-            if let b = (item as? BookModel) {
-                result.append(b.book)
+            if let b = (item as? PlayerModel) {
+                result.append(b.player)
             }
         }
         return result
     }
 }
 
-struct Book:Identifiable, Hashable {
+struct Player:Identifiable, Hashable {
     let id:String
     let name:String
     let desc:String
     let level:Int
-    let count:Int
+    let totalPoint:Int
     let lastCards:[UIImage]
 }
 
-final class BookStore : ObservableObject {
-    @Published var books:[Book] = []
+final class PlayerStore : ObservableObject {
+    @Published var players:[Player] = []
     func fetch() {
-        books = try! Realm().objects(BookModel.self)
+        players = try! Realm().objects(PlayerModel.self)
             .sorted(byKeyPath: "name", ascending: true)
-            .sorted(byKeyPath: "count", ascending: false)
+            .sorted(byKeyPath: "totalPoint", ascending: false)
             .sorted(byKeyPath: "level", ascending: false)
             .list
     }
 }
 
 struct TextRow : View {
-    var book:Book
-    let store:BookStore
+    var player:Player
+    let store:PlayerStore
     func clear() {
         let realm = try! Realm()
-        if let b = realm.object(ofType: BookModel.self, forPrimaryKey: self.book.id) {
+        if let b = realm.object(ofType: PlayerModel.self, forPrimaryKey: self.player.id) {
             realm.beginWrite()
             realm.delete(b)
             try! realm.commitWrite()
@@ -56,7 +54,7 @@ struct TextRow : View {
     }
     
     var bgcolor:Color {
-        switch (self.book.count % 4) {
+        switch (self.player.totalPoint % 4) {
         case 0:
             return Color.orange
         case 1:
@@ -70,9 +68,9 @@ struct TextRow : View {
         }
     }
     
-    var countMax:Int {
-        let list = try! Realm().objects(BookModel.self)
-        let max:Int? = list.max(ofProperty: "count")
+    var pointMax:Int {
+        let list = try! Realm().objects(PlayerModel.self)
+        let max:Int? = list.max(ofProperty: "totalPoint")
         return max ?? 0
     }
     
@@ -81,7 +79,7 @@ struct TextRow : View {
         if count <= 0 {
             return min
         }
-        let value = width * CGFloat(count) / CGFloat(countMax)
+        let value = width * CGFloat(count) / CGFloat(pointMax)
         if value <= min {
             return  min
         }
@@ -91,57 +89,57 @@ struct TextRow : View {
     var body: some View {
         return GeometryReader { geo in
             HStack {
-                Text(self.book.name)
-                Text(self.book.desc)
+                Text(self.player.name)
+                Text(self.player.desc)
                     .fontWeight(.light)
                     .font(/*@START_MENU_TOKEN@*/.caption/*@END_MENU_TOKEN@*/)
                     .foregroundColor(Color.black)
-                Text("\(self.book.level):\(self.book.count)")
-                if self.book.lastCards.count != 0 {
-                    Image(uiImage: self.book.lastCards[0])
+                Text("\(self.player.level):\(self.player.totalPoint)")
+                if self.player.lastCards.count != 0 {
+                    Image(uiImage: self.player.lastCards[0])
                         .resizable()
                         .scaledToFill()
                         .frame(width: 20, height: 30, alignment: .center)
-                    Image(uiImage: self.book.lastCards[1])
+                    Image(uiImage: self.player.lastCards[1])
                         .resizable()
                         .scaledToFill()
                         .frame(width: 20, height: 30, alignment: .center)
-                    Image(uiImage: self.book.lastCards[2])
+                    Image(uiImage: self.player.lastCards[2])
                         .resizable()
                         .scaledToFill()
                         .frame(width: 20, height: 30, alignment: .center)
-                    Image(uiImage: self.book.lastCards[3])
+                    Image(uiImage: self.player.lastCards[3])
                         .resizable()
                         .scaledToFill()
                         .frame(width: 20, height: 30, alignment: .center)
-                    Image(uiImage: self.book.lastCards[4])
+                    Image(uiImage: self.player.lastCards[4])
                         .resizable()
                         .scaledToFill()
                         .frame(width: 20, height: 30, alignment: .center)
                 }
             }
                 .frame(
-                    width: self.getWidth(width: geo.size.width, count: self.book.count)
+                    width: self.getWidth(width: geo.size.width, count: self.player.totalPoint)
                     , height: geo.size.height
                     , alignment: .center)
                 .background(self.bgcolor)
                 .cornerRadius(10)
                 .onTapGesture {
-                    let id = self.book.id
+                    let id = self.player.id
                     let realm = try! Realm()
-                    if let book = realm.object(ofType: BookModel.self, forPrimaryKey: id) {
+                    if let player = realm.object(ofType: PlayerModel.self, forPrimaryKey: id) {
                         realm.beginWrite()
-                        book.vote()
+                        player.play()
                         try! realm.commitWrite()
                         self.store.fetch()
                     }
             }
             .onLongPressGesture {
-                let id = self.book.id
+                let id = self.player.id
                 let realm = try! Realm()
-                if let book = realm.object(ofType: BookModel.self, forPrimaryKey: id) {
+                if let player = realm.object(ofType: PlayerModel.self, forPrimaryKey: id) {
                     realm.beginWrite()
-                    book.votes.removeAll()
+                    player.games.removeAll()
                     try! realm.commitWrite()
                     self.store.fetch()
                 }
@@ -152,34 +150,34 @@ struct TextRow : View {
 }
 
 struct ContentView: View {
-    @ObservedObject var store: BookStore = BookStore()
+    @ObservedObject var store: PlayerStore = PlayerStore()
     
-    @State var bookName = ""
-    @State var bookDesc = ""
+    @State var playerName = ""
+    @State var playerDesc = ""
     
     var body: some View {
-        NavigationView {
+        return NavigationView {
             VStack {
                 HStack {
                     VStack {
-                        TextField("book name", text: self.$bookName)
+                        TextField("player name", text: self.$playerName)
                             .frame(width: UIScreen.main.bounds.width - 50, height: 30, alignment: .center)
-                        TextField("book desc", text: self.$bookDesc)
+                        TextField("player desc", text: self.$playerDesc)
                             .frame(width: UIScreen.main.bounds.width - 50, height: 30, alignment: .center)
                     }
                     Button(action: {
-                        if self.bookName.isEmpty {
+                        if self.playerName.isEmpty {
                             return
                         }
                         let realm = try! Realm()
                         realm.beginWrite()
-                        let newbook = BookModel()
-                        newbook.name = self.bookName
-                        newbook.desc = self.bookDesc
-                        realm.add(newbook)
+                        let newPlayer = PlayerModel()
+                        newPlayer.name = self.playerName
+                        newPlayer.desc = self.playerDesc
+                        realm.add(newPlayer)
                         try! realm.commitWrite()
-                        self.bookName.removeAll()
-                        self.bookDesc.removeAll()
+                        self.playerName.removeAll()
+                        self.playerDesc.removeAll()
                         self.store.fetch()
                         UIApplication.shared.windows.first?.endEditing(true)
                         
@@ -191,7 +189,7 @@ struct ContentView: View {
                 HStack {
                     Button(action: {
                         let realm = try! Realm()
-                        let list = realm.objects(BookModel.self)
+                        let list = realm.objects(PlayerModel.self)
                         if list.count > 0 {
                             realm.beginWrite()
                             for model in list {
@@ -207,7 +205,7 @@ struct ContentView: View {
                     
                     //                    Button(action: {
                     //                        let realm = try! Realm()
-                    //                        let list = realm.objects(BookModel.self)
+                    //                        let list = realm.objects(PlayerModel.self)
                     //                        if list.count == 0 {
                     //                            return
                     //                        }
@@ -225,7 +223,7 @@ struct ContentView: View {
                     Button(action: {
                         let realm = try! Realm()
                         
-                        if let model = realm.objects(BookModel.self).last {
+                        if let model = realm.objects(PlayerModel.self).last {
                             realm.beginWrite()
                             realm.delete(model)
                             try! realm.commitWrite()
@@ -237,35 +235,34 @@ struct ContentView: View {
                     }
                 }
                 
-                List(store.books) { data in
-                    TextRow(book: data, store: self.store)
+                List(store.players) { data in
+                    TextRow(player: data, store: self.store)
                 }
                 
             }
         }.onAppear {
             self.store.fetch()
-            self.autoVote()
+            self.autoGamePlay()
         }
     }
     
-    func autoVote() {
+    func autoGamePlay() {
         let realm = try! Realm()
-        let list = realm.objects(BookModel.self)
+        let list = realm.objects(PlayerModel.self)
         if list.count == 0 {
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10)) {
-                self.autoVote()
+                self.autoGamePlay()
             }
             return
         }
-        playerCount += 1
-        let x = playerCount % list.count
-        
         realm.beginWrite()
-        list[x].vote()
+        for player in list {
+            player.play()
+        }
         try! realm.commitWrite()
         self.store.fetch()
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-            self.autoVote()
+            self.autoGamePlay()
         }
     }
 }

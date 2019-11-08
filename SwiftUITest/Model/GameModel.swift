@@ -1,5 +1,5 @@
 //
-//  VoteModel.swift
+//  GameModel.swift
 //  SwiftUITest
 //
 //  Created by Changyul Seo on 2019/11/07.
@@ -9,19 +9,19 @@
 import Foundation
 import RealmSwift
 
-class VoteModel: Object {
+class GameModel: Object {
     @objc dynamic var id = UUID().uuidString
-    @objc dynamic var targetId = ""
+    @objc dynamic var playerId = ""
     @objc dynamic var regDT = Date()
-    @objc dynamic var count = 0
+    @objc dynamic var point = 0
     private var cards = List<CardModel>()
     
     func insertCartd(cards: [CardManager.Card]) {
-        count = 0
+        point = 0
         for c in cards {
             let model = c.model
             self.cards.append(model)
-            count += c.value
+            point += c.value
         }
     }
     
@@ -30,7 +30,7 @@ class VoteModel: Object {
     }
     
     override static func indexedProperties() -> [String] {
-        return ["targetId"]
+        return ["playerId"]
     }
     
     var cardsStringValue:String {
