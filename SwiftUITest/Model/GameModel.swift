@@ -13,15 +13,13 @@ class GameModel: Object {
     @objc dynamic var id = UUID().uuidString
     @objc dynamic var playerId = ""
     @objc dynamic var regDT = Date()
-    @objc dynamic var point = 0
+    @objc dynamic var bettingMoney = 0
     private var cards = List<CardModel>()
     
-    func insertCartd(cards: [CardManager.Card]) {
-        point = 0
+    func insertCartd(cards: [Dealer.Card]) {
         for c in cards {
             let model = c.model
             self.cards.append(model)
-            point += c.value
         }
     }
     
@@ -54,9 +52,23 @@ class GameModel: Object {
         return result
     }
 
+    /** 카드 족보*/
+    enum CardValue:String {
+        case highcard = "Highcard"
+        case onePair = "One Pair"
+        case twoPairs = "Two pair"
+        case threeOfaKind = "Three of a kind"
+        case straight = "Straight"
+        case flush = "Flush"
+        case fullHouse = "Full house"
+        case fourOfaKind = "Four of a kind"
+        case straightFlush = "Straight flush"
+        case fiveOfaKind = "Five of a kind"
+    }
+    
     /** 족보판정*/
-    var gameResultValue:CardManager.CardValue {
-        var tcards:[CardManager.Card] = []
+    var gameResultValue:CardValue {
+        var tcards:[Dealer.Card] = []
         for card in cards {
             if let c = card.cardValue {
                 tcards.append(c)

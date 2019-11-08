@@ -12,51 +12,44 @@ import RealmSwift
 class PlayerModel: Object {
     @objc dynamic var id = UUID().uuidString
     @objc dynamic var name = ""
-    @objc dynamic var desc = ""
+    @objc dynamic var introduce = ""
     @objc dynamic var level = 0
-    @objc dynamic var totalPoint = 0
+    @objc dynamic var money = 0
     let games = List<GameModel>()
     
     override static func primaryKey() -> String? {
         return "id"
     }
+        
+    func initGame() {
+        let game = GameModel()
+        game.playerId = id
+        games.append(game)
+    }
     
-    var player:Player {
-        return .init(id:id , name: name, desc: desc, level: level, totalPoint: totalPoint, lastCards: games.last?.cardsImageValues ?? [])
+    func betting(money:Int) {
+        guard let game = games.last else {
+            return
+        }
+        game.bettingMoney = money
     }
     
     func play() {
-        func levelup() {
-            level += 1
+        guard let game = games.last else {
+            return
         }
-        if games.sum(ofProperty: "point") > 1000 {
-            levelup()
-        }
-                
-        let cards = CardManager.shared.popCard(cardNumber: 5)
-
-        let game = GameModel()
-        game.insertCartd(cards: cards)
-        totalPoint = games.sum(ofProperty: "point") + game.point
-        game.playerId = id
-        games.append(game)
         
-        switch game.gameResultValue {
-        case .highcard:
-            break
-        default:
-            levelup()
-        }
+        let cards = Dealer.shared.popCard(cardNumber: 5)
+        game.insertCartd(cards: cards)
     }
     
-    func voteClear() {
+    func gameClear() {
         games.removeAll()
-        totalPoint = 0
         level = 0
     }
     
-    var lastGamePoint:Int {
-        return games.last?.point ?? 0
+    var lastGameBettingMoney:Int {
+        return games.last?.bettingMoney ?? 0
     }
 }
 

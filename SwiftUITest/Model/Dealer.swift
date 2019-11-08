@@ -1,5 +1,5 @@
 //
-//  CardManager.swift
+//  Dealer.swift
 //  SwiftUITest
 //
 //  Created by Changyul Seo on 2019/11/07.
@@ -10,25 +10,13 @@ import Foundation
 import SwiftUI
 import RealmSwift
 
-class CardManager {
-    static let shared = CardManager()
+class Dealer {
+    static let shared = Dealer()
     /** 플레이어 의 수 */
     var players:Int {
         return try! Realm().objects(PlayerModel.self).count
     }
-    /** 카드 족보*/
-    enum CardValue:String {
-        case highcard = "Highcard"
-        case onePair = "One Pair"
-        case twoPairs = "Two pair"
-        case threeOfaKind = "Three of a kind"
-        case straight = "Straight"
-        case flush = "Flush"
-        case fullHouse = "Full house"
-        case fourOfaKind = "Four of a kind"
-        case straightFlush = "Straight flush"
-        case fiveOfaKind = "Five of a kind"
-    }
+   
     
     enum CardType:String {
         case spade = "S"
@@ -76,8 +64,7 @@ class CardManager {
         
         var model:CardModel {
             let model = CardModel()
-            model.index = index
-            model.type = typeValue
+            model.setData(card: self)
             return model
         }
         
